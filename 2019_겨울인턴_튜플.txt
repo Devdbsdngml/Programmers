@@ -1,0 +1,54 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String s) {
+        
+        // 주어진 s를 {} 로 구분지어 쪼개기
+        StringTokenizer st = new StringTokenizer(s, "{}");
+        
+        ArrayList<String> list = new ArrayList<String>();
+        
+        // s에 담겨있는 원소만 구분지어 리스트에 담기
+        while(st.hasMoreTokens()){
+            String ss = st.nextToken();
+            // 콤마(,) 제외
+            if(!ss.equals(","))
+                list.add(ss);
+        }
+        /*
+        2
+        2,1
+        2,1,3
+        2,1,3,4
+        ...
+        */
+        
+        // list의 원소 크기대로 오름차순 정렬
+        Collections.sort(list, new Comparator<String>(){
+           @Override
+            public int compare(String s1, String s2){
+                return s1.length() - s2.length();
+            }
+        });
+        
+        ArrayList<String> arrlist = new ArrayList<String>();
+        
+        for(String ss : list){
+            // arr에 ,를 제외해서 모든 원소 다 담기
+            String[] arr = ss.split(",");
+            for(int i=0; i<arr.length; i++){
+                // 중복 제거
+                if(!arrlist.contains(arr[i])){
+                    arrlist.add(arr[i]);
+                }
+            }
+        }
+        
+        int[] answer = new int[arrlist.size()];
+        
+        for(int i=0; i<answer.length; i++){
+            answer[i] = Integer.parseInt(arrlist.get(i));
+        }
+        return answer;
+    }
+}
