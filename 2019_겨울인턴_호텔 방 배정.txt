@@ -1,0 +1,53 @@
+import java.util.*;
+
+class Solution {
+    //                idx=0,1,2,3,4,5
+    // k=10, room_number=[1,3,4,1,3,1]
+    public long[] solution(long k, long[] room_number) {
+        long[] answer = new long[room_number.length];
+        
+        // HashMap<Key Value>
+        Map<Long, Long> map = new HashMap<>();
+        
+        for(int i=0; i<room_number.length; i++){
+            List<Long> list = new ArrayList<>();
+            long val = room_number[i];
+            
+            // 빈방이면
+            if(!map.containsKey(val)){
+                /* 
+                원하는 방이 이미 배정이 되었을 경우
+                원하는 방보다 크면서 비어있는 방 중 가장 작은 번호로 배정
+                -> value 에 +1을 해줌
+                */
+                map.put(val, val+1);
+                answer[i] = val;
+            // 빈방이 아니라면
+            } else{
+                // other에 value 값을 가져오고
+                // ArrayList에 value 값을 저장
+                long other = map.get(val);
+                list.add(val);
+                // 빈방을 찾기 위해 무한루프로 돌림
+                while(true){
+                    // 방이 겹쳐 다음 방을 배정 받았을 때
+                    // 그 방이 빈방이라면
+                    if(!map.containsKey(other)){
+                        map.put(other, other+1);
+                        answer[i] = other;
+                        break;
+                    // 빈방이 아니라면
+                    } else{
+                        list.add(other);
+                        other = map.get(other);
+                    }
+                }
+                for(long l : list){
+                    map.put(l, other+1);
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
