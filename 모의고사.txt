@@ -1,0 +1,30 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] answers) {
+        int[] answer = {};
+        int[] p1 = {1, 2, 3, 4, 5};
+        int[] p2 = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] p3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+        int p1A = 0, p2A = 0, p3A = 0;
+
+        for(int i=0; i<answers.length; i++){
+            if(p1[i%p1.length] == answers[i]) p1A++;
+            if(p2[i%p2.length] == answers[i]) p2A++;
+            if(p3[i%p3.length] == answers[i]) p3A++;
+        }
+
+        int maxValue = Math.max(Math.max(p1A, p2A), p3A);
+        List<Integer> l = new ArrayList<>();
+
+        if(maxValue==p1A) l.add(1);
+        if(maxValue==p2A) l.add(2);
+        if(maxValue==p3A) l.add(3);
+
+        answer = new int[l.size()];
+        for(int i=0; i<answer.length; i++){
+            answer[i] = l.get(i);
+        }
+        return answer;
+    }
+}
