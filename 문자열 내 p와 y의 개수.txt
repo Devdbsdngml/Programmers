@@ -1,0 +1,27 @@
+// 카카오 크레인 인형 뽑기 문제를 풀어서인가..
+// 보자마자 스택이 생각이 났다
+
+import java.util.*;
+
+class Solution {
+    boolean solution(String s) {
+        boolean answer = true;
+        char[] c = s.toLowerCase().toCharArray();
+        Stack<Character> stack = new Stack<>();
+
+        for(char cc : c){
+            if(cc == 'p')
+                if(stack.contains('y')) stack.pop();
+                else stack.push(cc);
+            else if(cc == 'y'){
+                if(stack.contains('p')) stack.pop();
+                else stack.push(cc);
+            }
+        }
+
+        if(!stack.isEmpty())
+            answer = false;
+
+        return answer;
+    }
+}
