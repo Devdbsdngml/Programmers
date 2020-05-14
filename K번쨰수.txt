@@ -1,0 +1,25 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] array, int[][] commands) {
+        int[] answer = new int[commands.length];
+        
+        for(int i=0; i<commands.length; i++){
+            int[] newarray = Arrays.copyOfRange(array, commands[i][0]-1, commands[i][1]);
+            Arrays.sort(newarray);
+            answer[i] = newarray[commands[i][2]-1];
+            
+//             int len = commands[i][1] - commands[i][0] + 1;
+//             int[] cut = new int[len];
+            
+//             int k=0;
+//             for(int j=commands[i][0]-1; j<=commands[i][1]-1; j++){
+//                 cut[k++] = array[j];
+//             }
+            
+//             Arrays.sort(cut);
+//             answer[i] = cut[commands[i][2]-1];
+        }
+        return answer;
+    }
+}
