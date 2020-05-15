@@ -1,0 +1,22 @@
+class Solution {
+    public String solution(String s, int n) {
+        String answer = "";
+        
+        /*
+        알파벳 개수가 26개니 넘어가면 순환을 해준다
+        이 숫자에 26으로 나눈 나머지에 'a' 나 'A'를 더해준다
+        */
+        
+        for(int i=0; i<s.length(); i++){
+            char c = s.charAt(i);
+            
+            if(Character.isUpperCase(c)){
+                c = (char)((c + n % 26 - 'A') % 26 +'A');
+            } else if(Character.isLowerCase(c)){
+                c = (char)((c + n % 26  - 'a') % 26 + 'a');
+            }
+            answer += c;
+        }
+        return answer;
+    }
+}
