@@ -1,0 +1,30 @@
+// 처음 풀이 테스트 케이스는 맞았으나 대개 틀림
+
+import java.util.*;
+
+class Solution {
+    public String solution(String s) {
+        
+        StringTokenizer st = new StringTokenizer(s, " ");
+        StringBuilder sb = new StringBuilder();
+        int size = st.countTokens();
+        String[] str = new String[size];
+        
+        for(int i=0; i<size; i++){
+            str[i] = st.nextToken();
+            for(int j=0; j<str[i].length(); j++){
+                char c = str[i].charAt(j);
+                if(j % 2 == 0){
+                    sb.append(Character.toUpperCase(c));
+                } else{
+                    sb.append(Character.toLowerCase(c));
+                }
+            }
+            sb.append(" ");
+        }
+        // 마지막 공백 제거
+        sb.delete(sb.length()-1, sb.length());
+        
+        return sb.toString();
+    }
+}
