@@ -1,4 +1,5 @@
 // 처음 풀이 테스트 케이스는 맞았으나 대개 틀림
+// 하나의 단어가 들어왔을 때가 처리가 안 됨
 
 import java.util.*;
 
@@ -28,3 +29,23 @@ class Solution {
         return sb.toString();
     }
 }
+
+// 두번째 풀이
+
+import java.util.*;
+
+class Solution {
+    public String solution(String s) {
+        StringBuilder sb = new StringBuilder();
+        String[] str = s.split("");
+        
+        int count = 0;
+        
+        for(String ss : str){
+            count = ss.equals(" ") ? 0 : count+1;
+            sb.append(count % 2 == 0 ? ss.toLowerCase() : ss.toUpperCase());
+        }
+        return sb.toString();
+    }
+}
+
