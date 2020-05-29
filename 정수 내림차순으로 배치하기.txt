@@ -1,0 +1,49 @@
+import java.util.*;
+
+class Solution {
+    public long solution(long n) {
+        
+        int len = (int)Math.log10(n)+1;
+        List<Integer> list = new ArrayList<>();
+        
+        for(int i=0; i<len; i++){
+            list.add((int)(n%10));
+            n /= 10;
+        }
+        
+        Collections.sort(list, Comparator.reverseOrder());
+        String str = "";
+        
+        for(int i : list)
+            str += i;
+        
+        return Long.parseLong(str);
+    }
+}
+
+// 아래와 같이 하려면 Primitive Type의 배열엔 안됨(byte, char, int, double, ...)
+// Wrapper Class 를 이욯해야된다
+// String, Integer 와 같은..
+
+import java.util.*;
+
+class Solution {
+    public long solution(long n) {
+        
+        int len = (int)Math.log10(n)+1;
+        Integer[] arr = new Integer[len];
+        
+        for(int i=0; i<len; i++){
+            arr[i] = (int)(n%10);
+            n /= 10;
+        }
+        
+        Arrays.sort(arr, Comparator.reverseOrder());
+        String str = "";
+        
+        for(int i : arr)
+            str += i;
+        
+        return Long.parseLong(str);
+    }
+}
