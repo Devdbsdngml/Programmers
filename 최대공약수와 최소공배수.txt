@@ -1,0 +1,21 @@
+class Solution {
+    public int[] solution(int n, int m) {
+        int[] answer = new int[2];
+        answer[0] = getGcd(Math.max(n, m), Math.min(n, m));
+        answer[1] = getLcm(n, m, answer[0]);
+        return answer;
+    }
+    
+    public int getGcd(int a, int b){
+        while(b > 0){
+            int tmp = a;
+            a = b;
+            b = tmp % b;
+        }
+        return a;
+    }
+    
+    public int getLcm(int a, int b, int gcd){
+        return (a*b)/gcd;
+    }
+}   
