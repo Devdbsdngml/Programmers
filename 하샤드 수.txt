@@ -1,0 +1,19 @@
+class Solution {
+    public boolean solution(int x) {
+        boolean answer = true;
+        
+        int len = (int) Math.log10(x)+1;
+        int ix = x;
+        int sum = 0;
+        
+        for(int i=0; i<len; i++){
+            sum += ix % 10;
+            ix /= 10;
+        }
+        
+        if(x % sum != 0)
+            answer = false;
+        
+        return answer;
+    }
+}
