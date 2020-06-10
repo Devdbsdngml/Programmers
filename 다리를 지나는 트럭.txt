@@ -1,0 +1,31 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+        
+        Queue<Integer> ing = new LinkedList<>(); // 다리를 건너는 중인 트럭 담을 큐
+        int[] exitTime = new int[truck_weights.length]; // 다리를 다 지났을 때 시간 담을 배열
+        int answer = 0;
+        int curTruck = 0; // 현재 트럭
+        
+        while(true){
+            // 다리를 지난 트럭 제거
+            if(!ing.isEmpty() && exitTime[ing.peek()] == answer){
+                weight += truck_weights[ing.poll()];
+            }
+            
+            // 대기 트럭을 다리에 올리기
+            if(curTruck < truck_weights.length && truck_weights[curTruck] <= weight){
+                ing.add(curTruck);
+                exitTime[curTruck] = answer + bridge_length;
+                weight -= truck_weights[curTruck];
+                curTruck++;
+            }
+            answer++;
+            if(ing.isEmpty())
+                break;
+        }
+        
+        return answer;
+    }
+}
