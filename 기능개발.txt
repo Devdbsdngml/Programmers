@@ -1,0 +1,41 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] progresses, int[] speeds) {
+        int[] answer;
+        
+        Queue<Integer> que = new LinkedList<>();
+        List<Integer> list = new ArrayList<>();
+        
+        // 기능 개발에 걸리는 일 수 que에 삽입
+        for(int i=0; i<progresses.length; i++){
+            que.add((100-progresses[i]) % speeds[i] == 0 ?
+                   (100-progresses[i]) / speeds[i] : (100-progresses[i]) / speeds[i] + 1);
+        }
+        // 7, 3, 9
+        
+        int prev = que.poll();
+        int cnt = 1;
+        
+        // 큐에 원소가 존재하지 않을 때 까지 반복
+        while(!que.isEmpty()){
+            int cur = que.poll();
+            // prev가 cur보다 크거나 같다면 prev를 배포할 때 cur도 배포를 해야됨으로
+            // cnt를 증가시킴
+            if(prev >= cur)
+                cnt++;
+            // 아니라면 prev만 배포하면 되니까 cnt = 1이 됨
+            else{
+                list.add(cnt);
+                cnt = 1;
+                prev = cur;
+            }
+        }
+        list.add(cnt);
+        answer = new int[list.size()];
+        for(int i=0; i<list.size(); i++)
+            answer[i] = list.get(i);
+        
+        return answer;
+    }
+}
