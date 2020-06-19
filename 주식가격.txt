@@ -17,3 +17,54 @@ class Solution {
 }
 
 // 스택/큐 분류문제인데 어떻게 풀어야 될까
+// 다른 사람 풀이 해석하기
+
+import java.util.Stack;
+
+class Solution {
+    public int[] solution(int[] prices) {
+        int[] answer = new int[prices.length];
+
+        Stack<Stock> stack = new Stack<>();
+
+        stack.push(new Stock(0, prices[0]));
+        for (int i = 1; i < prices.length ; i++) {
+            int price = prices[i];
+            while((!stack.isEmpty()) && (stack.peek().getCost() > price)) {
+                Stock item = stack.pop();
+                answer[item.getIndex()] = i - item.index;
+            }
+
+            stack.push(new Stock(i, prices[i]));
+        }
+
+        int lastIndex = stack.pop().index;
+        answer[lastIndex] = 0;
+
+        // stack 비우기
+        while(!stack.isEmpty()) {
+            Stock item = stack.pop();
+            answer[item.getIndex()] = lastIndex - item.index;
+        }
+
+        return answer;
+    }
+
+    public static class Stock {
+        private int index;
+        private int cost;
+
+        public Stock(int index, int cost) {
+            this.index = index;
+            this.cost = cost;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+    }
+}
