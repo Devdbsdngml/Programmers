@@ -1,0 +1,63 @@
+import java.util.*;
+
+class Solution {
+    class Point{
+        int x;
+        int y;
+        Point(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+    
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, 1, -1};
+    boolean[][] checked;
+    int cnt = 0;
+    
+    public int[] solution(int m, int n, int[][] picture) {
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = 0;
+        
+        checked = new boolean[m][n];
+        
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(picture[i][j] != 0 && !checked[i][j]){
+                    cnt = 1;
+                    bfs(m, n, picture, i, j);
+                    numberOfArea++;
+                    maxSizeOfOneArea = Math.max(cnt, maxSizeOfOneArea);
+                }
+            }
+        }
+
+        int[] answer = new int[2];
+        answer[0] = numberOfArea;
+        answer[1] = maxSizeOfOneArea;
+        return answer;
+    }
+    
+    void bfs(int m, int n, int[][] picture, int x, int y){
+        Queue<Point> que = new LinkedList<>();
+        que.add(new Point(x, y));
+        checked[x][y] = true;
+        
+        while(!que.isEmpty()){
+            Point point = que.poll();
+            
+            for(int i=0; i<4; i++){
+                int nextX = point.x + dx[i];
+                int nextY = point.y + dy[i];
+                
+                if(0 <= nextX && nextX < m && 0 <= nextY && nextY < n){
+                    if(picture[nextX][nextY] == picture[x][y] && !checked[nextX][nextY]){
+                        que.add(new Point(nextX, nextY));
+                        checked[nextX][nextY] = true;
+                        cnt++;
+                    }
+                }
+            }
+        }
+    }
+}
