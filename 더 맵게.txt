@@ -1,0 +1,56 @@
+// 처음 푼 풀이
+
+// 우선순위큐의 정확한 사용하는 때를 모르는 것 같음
+// 그래서 굳이 배열에서 K보다 큰 수를 우선순위 큐에 집어 넣을 필요가 있을까? 라고 생각함
+
+import java.util.*;
+
+class Solution {
+    public int solution(int[] scoville, int K) {
+        int answer = -1;
+        int cnt = 0;
+        PriorityQueue<Integer> que = new PriorityQueue<>();
+        
+        for(int i=0; i<scoville.length; i++){
+            if(scoville[i] < K)
+                que.offer(scoville[i]);
+        }
+        // 1, 2, 3
+        while(!que.isEmpty()){
+            int pre = que.poll();
+            int cur = que.poll();
+            if(pre + cur*2 < K){
+                que.offer(pre + cur*2);
+            }
+            cnt++;
+            answer = cnt;
+        }
+        return answer;
+    }
+}
+
+// 두번 째 풀이
+// 어차피 우선순위 큐는 offer를 하면 그의 자리에 맞는 인덱스에 추가가 된다
+
+import java.util.*;
+
+class Solution {
+    public int solution(int[] scoville, int K) {
+        int answer = 0;
+        PriorityQueue<Integer> que = new PriorityQueue<>();
+        
+        for(int i : scoville){
+                que.offer(i);
+        }
+    
+        while(que.size() > 1 && que.peek() <= K){
+            int pre = que.poll();
+            int cur = que.poll();
+            
+            que.offer(pre + cur*2);
+            answer++;
+        }
+        return que.peek() < K ? -1 : answer;
+    }
+}
+
