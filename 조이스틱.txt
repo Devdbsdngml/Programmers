@@ -1,0 +1,30 @@
+class Solution {
+    public int solution(String name) {
+        int answer = 0;
+        String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int len = alpha.length();
+        
+        // 위아래 최소 이동
+        for(int i=0; i<name.length(); i++){
+            if(name.charAt(i) != 'A'){
+                answer += Math.min(len - alpha.indexOf(name.charAt(i)), alpha.indexOf(name.charAt(i)));
+            }
+        }
+        
+        // 좌우 최소 이동
+        // 고려해야할 것이 A가 연속되는 경우 -> BBAAAAAAABB 
+        // next가 처음 A를 가리킨다면 뒤로 돌아가 마지막 A를 가리킬 때까지 커서를 이동하면 됨
+        int min = name.length()-1;
+        for(int i=0; i<name.length(); i++){
+            if(name.charAt(i) != 'A'){
+                int next = i+1;
+                while(next < name.length() && name.charAt(next) == 'A')
+                    next++;
+                int m = name.length() + 2*i - next;
+                min = Math.min(min, m);
+            }
+        }
+        
+        return answer+min;
+    }
+}
