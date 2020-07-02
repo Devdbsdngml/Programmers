@@ -1,4 +1,4 @@
-// 첫번째 풀이
+// 첫번 째 풀이
 // tc 1만 맞음..
 
 class Solution {
@@ -52,6 +52,73 @@ class Solution {
         for(int i=2; i<Math.sqrt(num); i++){
             if(num % i == 0)
                 check = false;
+        }
+        return check;
+    }
+}
+
+
+// 두번 째 풀이
+// 중복값 제거를 안 해서 틀렸었다 Set 선언
+import java.util.*;
+
+class Solution {
+    // 중복 값 제외하기 위해 선언
+    Set<Integer> set = new HashSet<>();
+    
+    public int solution(String numbers) {
+        int answer = 0;
+        String[] str = numbers.split("");
+        int[] arr = new int[str.length];
+        int n = arr.length;
+        int[] output = new int[n];
+        boolean[] visited = new boolean[n];
+        
+        for(int i=0; i<n; i++)
+            arr[i] = Integer.parseInt(str[i]);
+        
+        for(int i=1; i<=n; i++)
+            perm(arr, output, visited, 0, n, i);
+        
+        answer = set.size();
+        return answer;
+    }
+    
+    void perm(int[] arr, int[] output, boolean[] visited, int depth, int n, int r){
+        if(depth == r){
+            int num = makeInt(output, r);
+            if(checkPrime(num))
+                set.add(num);
+            return;
+        }
+        
+        for(int i=0; i<n; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                output[depth] = arr[i];
+                perm(arr, output, visited, depth+1, n, r);
+                visited[i] = false;
+            }
+        }
+    }
+    
+    int makeInt(int[] arr, int r){
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<r; i++)
+            sb.append(arr[i]);
+        return Integer.parseInt(sb.toString());
+    }
+    
+    boolean checkPrime(int num){
+        boolean check = true;
+        if(num <2)
+            return false;
+        
+        for(int i=2; i<=Math.sqrt(num); i++){
+            if(num % i == 0){
+                check = false;
+                break;
+            }
         }
         return check;
     }
