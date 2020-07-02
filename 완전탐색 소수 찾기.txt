@@ -1,0 +1,58 @@
+// 첫번째 풀이
+// tc 1만 맞음..
+
+class Solution {
+    int answer = 0;
+    
+    public int solution(String numbers) {
+        String[] str = numbers.split("");
+        int[] arr = new int[str.length];
+        int n = arr.length;
+        int[] output = new int[n];
+        boolean[] visited = new boolean[n];
+        
+        for(int i=0; i<n; i++)
+            arr[i] = Integer.parseInt(str[i]);
+        
+        for(int i=1; i<=n; i++)
+            perm(arr, output, visited, 0, n, i);
+        
+        return answer;
+    }
+    
+    void perm(int[] arr, int[] output, boolean[] visited, int depth, int n, int r){
+        if(depth == r){
+            if(checkPrime(print(output, r)))
+                answer++;
+            return;
+        }
+        
+        for(int i=0; i<n; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                output[depth] = arr[i];
+                perm(arr, output, visited, depth+1, n, r);
+                visited[i] = false;
+            }
+        }
+    }
+    
+    int print(int[] arr, int r){
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<r; i++)
+            sb.append(arr[i]);
+        return Integer.parseInt(sb.toString());
+    }
+    
+    boolean checkPrime(int num){
+        boolean check = true;
+        if(num <2)
+            return false;
+        
+        for(int i=2; i<Math.sqrt(num); i++){
+            if(num % i == 0)
+                check = false;
+        }
+        return check;
+    }
+}
