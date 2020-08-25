@@ -1,0 +1,55 @@
+import java.util.*;
+
+class Solution {
+    public String solution(int[] numbers, String hand) {
+        StringBuilder sb = new StringBuilder();
+        
+        int lL = 10;
+        int rL = 12;
+        
+        for(int num : numbers){
+            if(num == 1 || num == 4 || num == 7){
+                sb.append("L");
+                lL = num;
+            } else if(num == 3 || num == 6 || num == 9){
+                sb.append("R");
+                rL = num;
+            } else{
+              //2, 5, 8, 0 process
+                int disL = getDistance(lL, num);
+                int disR = getDistance(rL, num);
+                
+                if(disL < disR){
+                    sb.append("L");
+                    lL = num;
+                } else if(disL > disR){
+                    sb.append("R");
+                    rL = num;
+                } else{
+                    // disL == disR
+                    if(hand.equals("left")){
+                        sb.append("L");
+                        lL = num;
+                    } else{
+                        sb.append("R");
+                        rL = num;
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+    
+    int getDistance(int l, int n){
+        if(l == 0) l = 11;
+        if(n == 0) n = 11;
+        
+        int lX = (l-1)/3;
+        int lY = (l-1)%3;
+        
+        int nX = (n-1)/3;
+        int nY = (n-1)%3;
+        
+        return Math.abs(lX - nX) + Math.abs(lY - nY);
+    }
+}
