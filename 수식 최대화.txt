@@ -1,0 +1,74 @@
+import java.util.*;
+
+class Solution {
+    
+    char[] operation = {'+', '-', '*'};
+    boolean[] visited = new boolean[3];
+    ArrayList<Long> nums;
+    ArrayList<Character> oper;
+    long answer;
+    
+    public long solution(String expression) {
+        //init
+        nums = new ArrayList<>();
+        oper = new ArrayList<>();
+        answer = 0;
+        
+        // split nums oper
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<expression.length(); i++){
+            if('0' <= expression.charAt(i) && expression.charAt(i) <= '9'){
+                sb.append(expression.charAt(i));
+            } else{
+                nums.add(Long.parseLong(sb.toString()));
+                oper.add(expression.charAt(i));
+                sb = new StringBuilder();
+            }
+        }
+        nums.add(Long.parseLong(sb.toString()));
+        
+        dfs(0, new char[3]);
+        return answer;
+    }
+    
+    void dfs(int dep, char[] pri){
+        if(dep == 3){
+            ArrayList<Long> cNums = new ArrayList<>(nums);
+            ArrayList<Character> cOper = new ArrayList<>(oper);
+            
+            for(int i=0; i<pri.length; i++){
+                for(int j=0; j<cOper.size(); j++){
+                    if(cOper.get(j) == pri[i]){
+                        long res = calculate(cNums.remove(j), cNums.remove(j), pri[i]);
+                        cNums.add(j, res);
+                        cOper.remove(j);
+                        j--;
+                    }
+                }
+            }
+            answer = Math.max(answer, Math.abs(cNums.get(0)));
+            return;
+        }
+        for(int i=0; i<3; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                pri[dep] = operation[i];
+                dfs(dep+1, pri);
+                visited[i] = false;
+            }
+        }
+    }
+    
+    long calculate(long num1, long num2, char oper){
+        switch(oper){
+            case '+':
+                return num1 + num2;
+            case '-':
+                return num1 - num2;
+            case '*':
+                return num1 * num2;
+        }
+        return 0;
+    }
+    
+}
