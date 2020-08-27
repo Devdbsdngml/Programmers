@@ -4,69 +4,81 @@ class Solution {
     
     char[] operation = {'+', '-', '*'};
     boolean[] visited = new boolean[3];
-    ArrayList<Long> nums;
-    ArrayList<Character> oper;
+    List<Long> nums;
+    List<Character> oper;
     long answer;
     
     public long solution(String expression) {
-        //init
+        answer = 0;
         nums = new ArrayList<>();
         oper = new ArrayList<>();
-        answer = 0;
         
-        // split nums oper
         StringBuilder sb = new StringBuilder();
         for(int i=0; i<expression.length(); i++){
-            if('0' <= expression.charAt(i) && expression.charAt(i) <= '9'){
+            // expression의 숫자와 연산자 구분
+            // 숫자는 nums list에 add, 연산자는 oper list에 add
+            if(expression.charAt(i) >= '0' && expression.charAt(i) <= '9'){
                 sb.append(expression.charAt(i));
             } else{
                 nums.add(Long.parseLong(sb.toString()));
                 oper.add(expression.charAt(i));
-                sb = new StringBuilder();
+                sb.delete(0, sb.length());
             }
         }
+        // 마지막 숫자 nums list에 add
         nums.add(Long.parseLong(sb.toString()));
-        
+        // dfs로 최댓값 구하기
         dfs(0, new char[3]);
+        
         return answer;
     }
     
-    void dfs(int dep, char[] pri){
-        if(dep == 3){
-            ArrayList<Long> cNums = new ArrayList<>(nums);
-            ArrayList<Character> cOper = new ArrayList<>(oper);
+    void dfs(int depth, char[] priority){
+        if(depth == priority.length){
+            // nums list, oper list copy
+            List<Long> copyNums = new ArrayList<>(nums);
+            List<Character> copyOper = new ArrayList<>(oper);
             
-            for(int i=0; i<pri.length; i++){
-                for(int j=0; j<cOper.size(); j++){
-                    if(cOper.get(j) == pri[i]){
-                        long res = calculate(cNums.remove(j), cNums.remove(j), pri[i]);
-                        cNums.add(j, res);
-                        cOper.remove(j);
+            for(int i=0; i<priority.length; i++){
+                for(int j=0; j<copyOper.size(); j++){
+                    // 구한 연산자 순열과 연산 list에 담긴 연산자가 같으면
+                    if(priority[i] == copyOper.get(j)){
+                        long res = calc(copyNums.remove(j), copyNums.remove(j), priority[i]);
+                        copyNums.add(j, res);
+                        copyOper.remove(j);
                         j--;
                     }
                 }
             }
-            answer = Math.max(answer, Math.abs(cNums.get(0)));
+            answer = Math.max(answer, Math.abs(copyNums.get(0)));
             return;
         }
-        for(int i=0; i<3; i++){
+        
+        // 연산자 순열 구하기(순서대로 우선순위를 부여)
+        //+ - * 
+        //+ * - 
+        //- + * 
+        //- * + 
+        //* + - 
+        //* - +
+        for(int i=0; i<priority.length; i++){
             if(!visited[i]){
                 visited[i] = true;
-                pri[dep] = operation[i];
-                dfs(dep+1, pri);
+                priority[depth] = operation[i];
+                dfs(depth+1, priority);
                 visited[i] = false;
             }
-        }
+        }   
     }
     
-    long calculate(long num1, long num2, char oper){
+    long calc(long a, long b, char oper){
         switch(oper){
             case '+':
-                return num1 + num2;
+                return a+b;
             case '-':
-                return num1 - num2;
+                return a-b;
             case '*':
-                return num1 * num2;
+                return a*b;
         }
         return 0;
     }
