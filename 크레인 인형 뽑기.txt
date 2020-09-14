@@ -1,0 +1,36 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int[][] board, int[] moves) {
+        int answer = 0;
+        
+        Stack<Integer> st = new Stack<>();
+        
+        for(int i=0; i<moves.length; i++){
+            for(int j=0; j<board.length; j++){
+                // 인형 존재
+                if(board[j][moves[i]-1] != 0){
+                    // 바구니에 인형 존재 X
+                    if(st.isEmpty()){
+                        st.push(board[j][moves[i]-1]);
+                    } 
+                    // 바구니에 인형 존재 O
+                    else{
+                        // 바구니 속 인형 == 새로 뽑은 인형
+                        if(st.peek() == board[j][moves[i]-1]){
+                            st.pop();
+                            answer += 2;
+                        } 
+                        // 바구니 속 인형 != 새로 뽑은 인형
+                        else{
+                            st.push(board[j][moves[i]-1]);
+                        }
+                    }
+                    board[j][moves[i]-1] = 0;
+                    break;
+                }
+            }
+        }
+        return answer;
+    }
+}
