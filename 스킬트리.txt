@@ -1,0 +1,45 @@
+class Solution {
+    public int solution(String skill, String[] skill_trees) {
+        int answer = 0;
+
+        for(int i=0; i<skill_trees.length; i++){
+            boolean flag = true;
+            int idx = 0;
+            for(int j=0; j<skill_trees[i].length(); j++){
+                if(idx < skill.indexOf(skill_trees[i].charAt(j))){
+                    flag = false;
+                    break;
+                } else if(idx == skill.indexOf(skill_trees[i].charAt(j))){
+                    idx++;
+                }
+            }
+            if(flag) answer++;
+        }
+        return answer;
+    }
+}
+
+// 다른 사람 풀이 (비슷한데 진화된 for문 사용으로 보기 편함)
+class Solution {
+    public int solution(String skill, String[] skill_trees) {
+        int answer = 0;
+        for (String skillTree : skill_trees) {
+            int learningIdx = 0;
+            boolean isAble = true;
+            for (char curSkill : skillTree.toCharArray()) {
+                int skillIdx = skill.indexOf(curSkill);
+                if (skillIdx == -1)
+                    continue;
+                else if (skillIdx == learningIdx)
+                    learningIdx++;
+                else {
+                    isAble = false;
+                    break;
+                }
+            }
+            if (isAble)
+                answer++;
+        }
+        return answer;
+    }
+}
