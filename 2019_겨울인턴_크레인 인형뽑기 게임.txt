@@ -4,29 +4,28 @@ class Solution {
     public int solution(int[][] board, int[] moves) {
         int answer = 0;
         
-        Stack<Integer> st = new Stack<Integer>();
+        Stack<Integer> st = new Stack<>();
         
         for(int i=0; i<moves.length; i++){
             for(int j=0; j<board.length; j++){
-                // 인형이 존재하는 경우
+                // 인형 존재
                 if(board[j][moves[i]-1] != 0){
-                    // 스택이 비어 있으면
+                    // 바구니에 인형 존재 X
                     if(st.isEmpty()){
                         st.push(board[j][moves[i]-1]);
-                    }
-                    // 스택이 비어 있지 않으면
+                    } 
+                    // 바구니에 인형 존재 O
                     else{
-                        // 인형 동일한 경우 -> pop하고 카운트 +2
+                        // 바구니 속 인형 == 새로 뽑은 인형
                         if(st.peek() == board[j][moves[i]-1]){
                             st.pop();
-                            answer+=2;
-                        }
-                        // 인형이 동일하지 않을 경우 -> push
+                            answer += 2;
+                        } 
+                        // 바구니 속 인형 != 새로 뽑은 인형
                         else{
                             st.push(board[j][moves[i]-1]);
                         }
                     }
-                    // 인형 뺀 자리 0으로 만들어주기
                     board[j][moves[i]-1] = 0;
                     break;
                 }
