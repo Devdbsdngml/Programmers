@@ -28,3 +28,34 @@ class Solution {
         return answer+min;
     }
 }
+
+
+// 두번 째
+class Solution {
+    public int solution(String name) {
+        int answer = 0;
+        String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int len = alpha.length();
+        
+        // 좌우 이동은 좌 -> 우 로 한번씩이 최소가 될 수 있음
+        int min = name.length()-1;
+        for(int i=0; i<name.length(); i++){
+            if(name.charAt(i) != 'A'){
+                // 상하 이동 최소 횟수 구하기
+                answer += Math.min(len - alpha.indexOf(name.charAt(i)), alpha.indexOf(name.charAt(i)));
+                // 좌우 이동 최소 횟수 구하기
+                // A가 연속되는 경우에 따라 최소 횟수가 달라진다
+                // 현재의 다음 위치(next)가 계속 A일때까지 next++
+                int next = i+1;
+                while(next < name.length() && name.charAt(next) == 'A')
+                    next++;
+                // i*2 -> 현재 위치에서 첫 위치로 돌아간후
+                // name.length() - next -> A가 연속으로 나오는 다음(next)을 name.length에서 계산
+                int m = name.length() + 2*i - next;
+                min = Math.min(min, m);
+            }
+        }
+        
+        return answer+min;
+    }
+}
