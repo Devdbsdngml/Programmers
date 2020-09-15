@@ -37,3 +37,42 @@ class Solution {
         return answer;
     }
 }
+
+// 다른 사람 풀이(시간이 오래 걸림)
+class Solution {
+    public int solution(String s) {
+        int answer = s.length();
+        
+        for(int i=1; i<=s.length()/2; i++){
+            String comStr = compress(s, i);
+            answer = comStr.length() < answer ? comStr.length() : answer;
+        }
+        return answer;
+    }
+    
+    String compress(String string, int slice){
+        StringBuilder sb = new StringBuilder();
+        String str = string + " "; // substring을 위한 공백 하나 추가
+        
+        String pre = ""; // 이전 문자열
+        int cnt = 1; // 압축되는 문자 갯수
+        int i; 
+        for (i = 0; i < str.length() - slice; i += slice){
+            String subStr = str.substring(i, i + slice); // 그 다음 문자열
+            if (subStr.equals(pre)){ // 이전 문자열과 현재 문자열이 같으면 cnt 증가
+                cnt++;
+            } else{
+                if (cnt != 1) sb.append(cnt); // cnt가 1일때 삽입하지 않음
+                sb.append(pre);
+                pre = subStr;
+                cnt = 1;
+            }
+        }
+        
+        if (cnt != 1) sb.append(cnt);
+        sb.append(pre);
+        if (i < string.length()) sb.append(string.substring(i)); // 나머지 substring 삽입
+
+        return sb.toString();
+    }
+}
