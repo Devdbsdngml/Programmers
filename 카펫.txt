@@ -1,0 +1,57 @@
+// 첫번 째 풀이
+// 갈색과 노란색 합의 약수를 구해서 인접한 수를 구하면 될 줄 알았다
+// 3개 TC 가 틀림..
+import java.util.*;
+
+class Solution {
+    public int[] solution(int brown, int yellow) {
+        int[] answer = new int[2];
+        
+        int num = brown + yellow;
+        List<Integer> list = new ArrayList<>();
+        
+        for(int i=1; i<=num; i++){
+            if(num % i == 0)
+                list.add(i);
+        }
+        
+        int size = list.size();
+        
+        if(size % 2 == 0){
+            answer[0] = list.get(size/2);
+            answer[1] = list.get(size/2 - 1);
+        } else{
+            answer[0] = list.get(size/2);
+            answer[1] = list.get(size/2);
+        }
+        
+        return answer;
+    }
+}
+
+// 두번 째 풀이
+class Solution {
+    public int[] solution(int brown, int yellow) {
+        int[] answer = new int[2];
+        int num = brown + yellow;
+        // 중요한 것 row는 무조건 3 이상이어야 노란격자가 들어감
+        
+        // 약수 구하기
+        // brown = 10, yellow = 2 라면
+        // (1,12), (2,6), (3,4), (4,3), (6,2), (12,1)
+        for(int i=1; i<=num; i++){
+            if(num % i == 0){
+                int col = num / i; // 가로
+                int row = num / col; // 세로
+                
+                // 노란 격자의 수는 가로 세로에서 각 2개씩 뺀 길이의 곱이어야 함(테두리니까)
+                // 가로 길이는 세로보다 길거나 같음
+                if((col - 2) * (row - 2) == yellow && col >= row){
+                    answer[0] = col;
+                    answer[1] = row;
+                }
+            }
+        }
+        return answer;
+    }
+}
