@@ -1,0 +1,46 @@
+import java.util.*;
+
+class Solution {
+    public String solution(String s) {
+        StringBuilder sb = new StringBuilder();
+        List<Integer> list = new ArrayList<>();
+        StringTokenizer st = new StringTokenizer(s, " ");
+        int size = st.countTokens();
+        
+        while(st.hasMoreTokens()){
+            list.add(Integer.parseInt(st.nextToken()));
+        }
+        
+        Collections.sort(list);
+        sb.append(list.get(0).toString());
+        sb.append(" ");
+        sb.append(list.get(size-1).toString());
+        
+        return sb.toString();
+    }
+}
+
+
+// 다른 사람 풀이
+public class GetMinMaxString {
+    public String getMinMaxString(String str) {
+        String[] tmp = str.split(" ");
+        int min, max, n;
+        min = max = Integer.parseInt(tmp[0]);
+        for (int i = 1; i < tmp.length; i++) {
+                n = Integer.parseInt(tmp[i]);
+            if(min > n) min = n;
+            if(max < n) max = n;
+        }
+
+        return min + " " + max;
+
+    }
+
+    public static void main(String[] args) {
+        String str = "1 2 3 4";
+        GetMinMaxString minMax = new GetMinMaxString();
+        //아래는 테스트로 출력해 보기 위한 코드입니다.
+        System.out.println("최대값과 최소값은?" + minMax.getMinMaxString(str));
+    }
+}
