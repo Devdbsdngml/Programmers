@@ -26,3 +26,50 @@ class Solution {
         return sb.toString();
     }
 }
+
+
+// 두번 째 풀이
+// stringTokenizer 를 사용하면 안 됐고 마지막 공백이 있을 경우를 처리해줘야 한다.
+
+import java.util.*;
+
+class Solution {
+    public static String solution(String s) {
+        s = s.toLowerCase();
+        String[] words = s.split(" ");
+        
+        // TC 8번이 마지막 문자열에 공백을 처리하는 것인 듯
+        if(s.endsWith(" "))
+            words[words.length-1] += " ";
+        
+        for(int i=0; i<words.length; i++){
+            if(words[i].length() > 0){
+                char[] arr = words[i].toCharArray();
+                arr[0] = Character.toUpperCase(arr[0]);
+                
+                words[i] = new String(arr);
+            }
+        }
+        
+        StringBuilder sb = new StringBuilder(words[0]);
+        for(int i=1; i<words.length; i++)
+            sb.append(" "+words[i]);
+        
+        return sb.toString();
+    }
+}
+
+// 다른 사람 풀이....
+
+public String solution(String s) {
+        String answer = "";
+        String[] sp = s.toLowerCase().split("");
+        boolean flag = true;
+
+        for(String ss : sp) {
+            answer += flag ? ss.toUpperCase() : ss;
+            flag = ss.equals(" ") ? true : false;
+        }
+
+        return answer;
+  }
