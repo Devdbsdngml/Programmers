@@ -1,0 +1,28 @@
+// 첫번 째 풀이 43점..
+
+import java.util.*;
+
+class Solution {
+    public String solution(String s) {
+        s = s.toLowerCase();
+        StringTokenizer st = new StringTokenizer(s, " ");
+        StringBuilder sb;
+        String[] words = new String[st.countTokens()];
+        
+        for(int i=0; i<words.length; i++){
+            words[i] = st.nextToken();
+            if(words[i].length() > 0){
+                char[] arr = words[i].toCharArray();
+                arr[0] = Character.toUpperCase(arr[0]);
+                
+                words[i] = new String(arr);
+            }
+        }
+        
+        sb = new StringBuilder(words[0]);
+        for(int i=1; i<words.length; i++)
+            sb.append(" "+words[i]);
+        
+        return sb.toString();
+    }
+}
