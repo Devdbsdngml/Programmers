@@ -1,0 +1,51 @@
+import java.util.*;
+
+class Solution {
+    public String[] solution(String[] record) {
+        
+        Map<String, String> nick = makeNicknames(record);
+        String[] answer = result(nick, record);
+        
+        return answer;
+    }
+    
+    private Map<String, String> makeNicknames(String[] record){
+        
+        Map<String, String> map = new HashMap<>();
+        
+        for(String s : record){
+            StringTokenizer st = new StringTokenizer(s, " ");
+            String command = st.nextToken();
+            
+            if(command.equals("Leave"))
+                continue;
+            
+            map.put(st.nextToken(), st.nextToken());
+        }
+        
+        return map;
+    }
+    
+    private String[] result(Map<String, String> map, String[] record){
+        
+        List<String> list = new ArrayList<>();
+        
+        for(String s : record){
+            StringTokenizer st = new StringTokenizer(s, " ");
+            String command = st.nextToken();
+            
+            if(command.equals("Enter")){
+                String nick = map.get(st.nextToken());
+                String msg = nick + "님이 들어왔습니다.";
+                list.add(msg);
+            } else if(command.equals("Leave")){
+                String nick = map.get(st.nextToken());
+                String msg = nick + "님이 나갔습니다.";
+                list.add(msg);
+            }
+        }
+        
+        return list.toArray(new String[0]);
+    }
+    
+}
