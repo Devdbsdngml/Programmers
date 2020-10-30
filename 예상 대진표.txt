@@ -1,0 +1,33 @@
+class Solution
+{
+    public int solution(int n, int a, int b)
+    {
+        int answer = 1;
+        
+        while(true){
+            if(check(a, b)){
+                break;
+            }
+            a = (a+1)/2;
+            b = (b+1)/2;
+            
+            answer++;
+        }
+
+        return answer;
+    }
+    
+    public boolean check(int a, int b){
+        int left = a;
+        int right = b;
+        
+        if(a > b){
+            left = b;
+            right = a;
+        }
+        
+        if((left % 2) != 0 && (right - left) == 1)
+            return true;
+        return false;
+    }
+}
