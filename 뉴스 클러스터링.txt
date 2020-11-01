@@ -1,0 +1,53 @@
+// 생각치 못한 실수 부분이 매우 많았음
+
+import java.util.*;
+
+class Solution {
+    public int solution(String str1, String str2) {
+        int answer = 0;
+        
+        str1 = str1.replaceAll("[^a-zA-Z]", " ").toUpperCase();
+        str2 = str2.replaceAll("[^a-zA-Z]", " ").toUpperCase();
+        
+        ArrayList<String> list1 = new ArrayList<>();
+        ArrayList<String> list2 = new ArrayList<>();
+        
+        for(int i=0; i<str1.length()-1; i++){
+            if(!str1.substring(i, i+2).contains(" ")){
+                list1.add(str1.substring(i, i+2));
+            }
+        }
+        
+        for(int i=0; i<str2.length()-1; i++){
+            if(!str2.substring(i, i+2).contains(" ")){
+                list2.add(str2.substring(i, i+2));
+            }
+        }
+        
+        double interSize = interaction(list1, list2).size();
+        double unionSize = list1.size() + list2.size() - interSize;
+        
+        if(interSize == 0 && unionSize == 0){
+            answer = 65536;
+        } else{
+            answer = (int)(interSize / unionSize *  65536);
+        }
+        
+        return answer;
+    }
+    
+    public ArrayList<String> interaction(ArrayList<String> a, ArrayList<String> b){
+        a = (ArrayList<String>) a.clone();
+        b = (ArrayList<String>) b.clone();
+        ArrayList<String> list = new ArrayList<>();
+        
+        for(String s : a){
+            if(b.contains(s)){
+                list.add(s);
+                b.remove(s);
+            }
+        }
+        
+        return list;
+    }
+}
