@@ -51,3 +51,62 @@ class Solution {
         return list;
     }
 }
+
+// 두 번째 풀이
+import java.util.*;
+
+class Solution {
+    public int solution(String str1, String str2) {
+        int answer = 0;
+        
+        str1 = str1.toUpperCase();
+        str2 = str2.toUpperCase();
+        
+        ArrayList<String> list1 = makeList(str1);
+        ArrayList<String> list2 = makeList(str2);
+        
+        double interSize = interaction(list1, list2).size();
+        double unionSize = list1.size() + list2.size() - interSize;
+        
+        if(interSize == 0 && unionSize == 0){
+            answer = 65536;
+        } else{
+            answer = (int) (interSize / unionSize * 65536);
+        }
+        
+        return answer;
+    }
+    
+    public ArrayList<String> makeList(String str){
+        
+        ArrayList<String> result = new ArrayList<>();
+        
+        for(int i=0; i<str.length()-1; i++){
+            char c1 = str.charAt(i);
+            char c2 = str.charAt(i+1);
+            if('A' <= c1 && c1 <= 'Z' && 'A' <= c2 && c2 <= 'Z'){
+                String s = String.valueOf(c1) + String.valueOf(c2);
+                result.add(s);
+            }
+        }
+        
+        return result;
+    }
+    
+    public ArrayList<String> interaction(ArrayList<String> list1, ArrayList<String> list2){
+        list1 = (ArrayList<String>) list1.clone();
+        list2 = (ArrayList<String>) list2.clone();
+        
+        ArrayList<String> result = new ArrayList<>();
+        
+        for(String s : list1){
+            if(list2.contains(s)){
+                result.add(s);
+                list2.remove(s);
+            }
+        }
+        
+        return result;
+    }
+    
+}
