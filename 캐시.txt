@@ -1,0 +1,34 @@
+import java.util.*;
+
+class Solution {
+    public static final int hit = 1;
+    public static final int miss = 5;
+    public int solution(int cacheSize, String[] cities) {
+        int answer = 0;
+        LinkedList<String> que = new LinkedList<>();
+
+        if(cacheSize == 0){
+            return cities.length * miss;
+        }
+
+        for(String s : cities){
+            s = s.toUpperCase();
+            // hit
+            if(que.contains(s)){
+                que.remove(s);
+                que.addFirst(s);
+                answer += hit;
+            } 
+            // miss
+            else{
+                if(que.size() == cacheSize){
+                    que.removeLast();
+                }
+                que.addFirst(s);
+                answer += miss;
+            }
+        }
+
+        return answer;
+    }
+}
