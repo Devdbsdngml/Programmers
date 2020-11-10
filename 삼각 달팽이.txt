@@ -1,0 +1,102 @@
+// 나의 풀이
+// 정삼각형으로 나와있지만 왼쪽 벽에 붙은 이등변 삼각형으로 생각하고 풀면 된다
+// 1
+// 2   9
+// 3  10  8
+// 4   5  6  7
+
+// ↓, →, ↖ 세 개를 반복해가며 n이 0이 될때까지 반복하면 됨
+
+
+class Solution {
+    public int[] solution(int n) {
+        int len = n * (n + 1) / 2;
+        int[] answer = new int[len];
+
+        int[][] arr = new int[n][n];
+        int row = -1;
+        int col = 0;
+        int val = 1;
+
+        while(true){
+            // 왼쪽 대각선 내려가며(row를 1씩 증가)
+            for(int i=0; i<n; i++){
+                row += 1;
+                arr[row][col] = val;
+                val++;
+            }
+            n--;
+            if(n == 0) break;
+
+            // 아랫변 채우기(col를 1씩 증가)
+            for(int i=0; i<n; i++){
+                col += 1;
+                arr[row][col] = val;
+                val++;
+            }
+            n--;
+            if(n == 0) break;
+
+            // 오른쪽 대각선 올라가기(row와 col이 1씩 감소)
+            for(int i=0; i<n; i++){
+                row -= 1;
+                col -= 1;
+                arr[row][col] = val;
+                val++;
+            }
+            n--;
+            if(n == 0) break;
+        }
+
+        int idx = 0;
+        for(int[] i : arr){
+            for(int j : i){
+                if(j != 0){
+                    answer[idx++] = j;
+                }
+            }
+        }
+
+        return answer;
+    }
+}
+
+// 다른 사람 풀이
+// 내가 하고자 했던 방향이랑 같았지만 훨씬 더 가독성 있게 구현됨
+// 나는 무한루프를 돌며 n이 0일 때를 계속 검사해줬지만
+// 결국엔 ↓, →, ↖ 이 3가지를 반복하며 배열을 채워가니까
+// i % 3의 값에 따라 배열을 채워나가면 됐던 것
+
+class Solution {
+    public int[] solution(int n) {
+        int[] answer = new int[(n*(n+1))/2];
+        int[][] matrix = new int[n][n];
+
+        int x = -1, y = 0;
+        int num = 1;
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = i; j < n; ++j) {
+                if (i % 3 == 0) {
+                    ++x;
+                } else if (i % 3 == 1) {
+                    ++y;
+                } else if (i % 3 == 2) {
+                    --x;
+                    --y;
+                }
+                matrix[x][y] = num++;
+            }
+        }
+
+        int k = 0;
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n; ++j) {
+                if(matrix[i][j] == 0) break;
+                answer[k++] = matrix[i][j];
+            }
+        }
+
+        return answer;
+    }
+}
