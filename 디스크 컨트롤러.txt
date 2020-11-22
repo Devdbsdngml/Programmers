@@ -100,3 +100,57 @@ class Solution {
         return answer / jobs.length;
     }
 }
+
+// 다시 풀어보기
+import java.util.*;
+
+class Solution {
+    class Job implements Comparable<Job>{
+        int requestTime;
+        int workingTime;
+        
+        Job(int requestTime, int workingTime){
+            this.requestTime = requestTime;
+            this.workingTime = workingTime;
+        }
+        
+        @Override
+        public int compareTo(Job job){
+            return this.workingTime - job.workingTime;
+        }
+    }
+    public int solution(int[][] jobs) {
+        
+        Arrays.sort(jobs, new Comparator<int[]>(){
+            @Override
+            public int compare(int[] a, int[] b){
+                return a[0] - b[0];
+            }
+        });
+        
+        PriorityQueue<Job> que = new PriorityQueue<>();
+        
+        int answer = 0;
+        int cnt = 0; // 작업완료 개수
+        int time = jobs[0][0]; // 가장 먼저 요청된 시간
+        int idx = 0;
+        
+        while(cnt < jobs.length){
+            while(idx < jobs.length && jobs[idx][0] <= time){
+                que.add(new Job(jobs[idx][0], jobs[idx][1]));
+                idx++;
+            }
+            
+            if(!que.isEmpty()){
+                Job job = que.poll();
+                time += job.workingTime;
+                answer += time - job.requestTime;
+                cnt++;
+            } else{
+                time++;
+            }
+        }
+        
+        return answer / jobs.length;
+    }
+}
