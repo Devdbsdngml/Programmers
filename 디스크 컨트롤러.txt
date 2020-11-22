@@ -147,7 +147,7 @@ class Solution {
                 answer += time - job.requestTime;
                 cnt++;
             } else{
-                time++;
+                time = jobs[idx][0];
             }
         }
         
