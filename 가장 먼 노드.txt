@@ -1,0 +1,78 @@
+// 가중치가 없는 그래프의 최소거리 -> BFS 
+// 1부터 n 노드까지의 거리를 계산해서 가장 큰 거리의 개수를 세면 되겠다고 생각
+
+import java.util.*;
+
+class Solution {
+    public int solution(int n, int[][] edge) {
+        int answer = 0;
+        int max = 0;
+        int[] dist = new int[n+1]; // 1부터 n 노드까지 거리를 저장할 배열
+        boolean[][] connect = new boolean[n+1][n+1]; // 연결되어 있는지 체크 배열
+        Queue<Integer> que = new LinkedList<>(); // 노드를 삽입할 큐
+        
+        for(int i=0; i<edge.length; i++){
+            int from = edge[i][0];
+            int to = edge[i][1];
+            // 간선은 양방향
+            connect[from][to] = connect[to][from] = true;
+        }
+        
+        // 1번 노드부터 BFS
+        que.add(1);
+        while(!que.isEmpty()){
+            int idx = que.poll();
+            for(int i=2; i<=n; i++){
+                if(dist[i] == 0 && connect[idx][i]){
+                    dist[i] = dist[idx] + 1;
+                    que.add(i);
+                }
+            }
+        }
+        
+        for(int i=1; i<dist.length; i++){
+            if(dist[i] > max){
+                max = dist[i];
+                answer = 0;
+            }
+            if(dist[i] == max){
+                answer++;
+            }
+        }
+        
+        return answer;
+    }
+}
+
+// 다른 사람 풀이
+// 가중치가 없는 그래프에서 
+// 가장 멀리 떨어져 있는 노드(최단 경로로 이동했을 때 간선의 개수가 가장 많은 노드)
+// 는 마지막 큐의 사이즈와 같다(기억!)
+
+    public int bfs(int n, int[][] edge){
+        boolean[] check = new boolean[n];
+        boolean[][] connect = new boolean[n][n];
+        Queue<Integer> q = new LinkedList<>();
+        for(int i=0; i<edge.length; i++){
+            connect[edge[i][0]-1][edge[i][1]-1]=true;
+            connect[edge[i][1]-1][edge[i][0]-1]=true;
+        }
+        check[0]=true;
+        q.add(0);
+        
+        int answer = 0;
+        while(!q.isEmpty()){
+            int qSize = q.size();
+            for(int i=0; i<qSize;i++){
+                int node = q.poll();
+                for(int j=0; j<n; j++){
+                    if(connect[j][node]&&!check[j]){
+                        check[j]=true;
+                        q.add(j);
+                    }
+                }
+            }
+            answer=qSize;
+        }
+        return answer;
+    }
