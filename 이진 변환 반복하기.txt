@@ -1,0 +1,63 @@
+// 첫 번째 풀이
+class Solution {
+    public int[] solution(String s) {
+        int[] answer = new int[2];
+        int cnt = 0;
+        int removeZero = 0;
+        
+        while(!s.equals("1")){
+            int cntOne = 0;
+            for(char c : s.toCharArray()){
+                if(c == '1'){
+                    cntOne++;
+                } else{
+                    removeZero++;
+                }
+            }
+            s = Integer.toBinaryString(cntOne);
+            cnt++;
+        }
+        
+        answer[0] = cnt;
+        answer[1] = removeZero;
+        
+        return answer;
+    }
+}
+
+// 두 번째 풀이는 재귀로 풀어보고 싶었다
+class Solution {
+    private int cnt;
+    private int remove;
+    
+    public int[] solution(String s) {
+        int[] answer = new int[2];
+        cnt = 0;
+        remove = 0;
+        
+        conversion(s);
+        
+        answer[0] = cnt;
+        answer[1] = remove;
+        
+        return answer;
+    }
+    
+    private void conversion(String str){
+        if(str.equals("1")){
+            return;
+        }
+        
+        cnt++;
+        int cntOne = 0;
+        for(char c : str.toCharArray()){
+            if(c == '0'){
+                remove++;
+            } else{
+                cntOne++;
+            }
+        }
+        
+        conversion(Integer.toBinaryString(cntOne));
+    }
+}
