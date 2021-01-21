@@ -1,0 +1,59 @@
+/*
+
+1. 구역을 정한다 구역이 0으로 채워져 있으면 0으로 압축 or 1로 채워져 있으면 1로 압축
+1-1. 만약 모두 똑같은 숫자라면 zeroCount 혹은 oneCount 증가
+1-2. 압축되지 않으면 2번으로
+
+2. 길이/2 만큼 줄여서 재귀로 1번 과정을 진행
+
+
+*/
+
+class Solution {
+    private int[][] copyArr; // arr 참조 변수
+    private int zeroCount;
+    private int oneCount;
+    
+    public int[] solution(int[][] arr) {
+        int[] answer = new int[2];
+        
+        zeroCount = 0;
+        oneCount = 0;
+        copyArr = arr;
+        
+        count(0, 0, arr.length);
+        
+        answer[0] = zeroCount;
+        answer[1] = oneCount;
+        
+        return answer;
+    }
+    
+    private void count(int x, int y, int size){
+        if(isPossible(x, y, size)){
+            int num = copyArr[x][y];
+            if(num == 0) zeroCount++;
+            else oneCount++;
+            
+            return;
+        }
+        
+        count(x, y, size/2);
+        count(x, y+size/2, size/2);
+        count(x+size/2, y, size/2);
+        count(x+size/2, y+size/2, size/2);
+    }
+    
+    // x,y에서 size 범위까지 같은 값인가 확인하는 메소드
+    private boolean isPossible(int x, int y, int size){
+        int num = copyArr[x][y];
+        for(int i=x; i<x+size; i++){
+            for(int j=y; j<y+size; j++){
+                if(num != copyArr[i][j])
+                    return false;
+            }
+        }
+        
+        return true;
+    }
+}
