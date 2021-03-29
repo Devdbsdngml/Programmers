@@ -1,0 +1,62 @@
+// 오랜만이라 그런지 간단한 구현 문제임에도 시간이 꽤 걸림
+
+class Solution {
+    public String solution(String new_id) {
+        String answer = new_id.toLowerCase(); // 1단계
+        String id = "";
+        
+        // 2단계
+        for(char c : answer.toCharArray()){
+            if(Character.isLetterOrDigit(c) || c == '-' || c == '_' || c == '.'){
+                id += String.valueOf(c);
+            }
+        }
+        
+        // 3단계
+        for(int i=0; i<id.length(); i++){
+            if(id.charAt(i) == '.'){
+                int next = i+1;
+                String dot = ".";
+                
+                while(next != id.length() && id.charAt(next) == '.'){
+                    next++;
+                    dot += ".";
+                }
+                
+                if(dot.length() >= 2){
+                    id = id.replace(dot, ".");
+                }
+            }
+        }
+        
+        // 4단계
+        if(id.startsWith(".")){
+            id = id.substring(1, id.length());
+        }
+        if(id.endsWith(".")){
+            id = id.substring(0, id.length()-1);
+        }
+            
+        // 5단계
+        if(id.length() == 0){
+            id += "a";
+        }
+        
+        // 6단계
+        if(id.length() >=16){
+            id = id.substring(0, 15);
+            if(id.endsWith(".")){
+                id = id.substring(0, 14);
+            }
+        }
+        
+        // 7단계
+        if(id.length() <=2){
+            while(id.length() < 3){
+                id += id.charAt(id.length()-1);
+            }
+        }
+        
+        return id;
+    }
+}
