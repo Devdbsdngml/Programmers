@@ -1,0 +1,39 @@
+import java.util.*;
+
+class Solution {
+    long ans;
+    public long solution(int n, int[] times) {
+        
+        Arrays.sort(times);
+        search(n, times);
+        return ans;
+    }
+    
+    void search(int n, int[] times){
+        long left = 1; // 최소 시간
+        long right = (long)times[times.length-1] * n; // 최대 시간 예시의 경우 60분 (10분 * 6명)
+        ans = Long.MAX_VALUE;
+        
+        while(left <= right){
+            long mid = (left+right) / 2;
+            
+            if(isPossible(n, times, mid)){
+                ans = Math.min(ans, mid);
+                right = mid - 1;
+            } else{
+                left = mid + 1;
+            }
+        }
+    }
+    
+    boolean isPossible(int n, int[] times, long mid){
+        // mid 분 동안 n명의 사람이 모두 가능하냐?
+        long possible = 0;
+        
+        for(int i=0; i<times.length; i++){
+            possible += mid/times[i];
+        }
+        
+        return possible >= n ? true : false;
+    }
+}
