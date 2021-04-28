@@ -1,0 +1,71 @@
+import java.util.*;
+
+class Solution {
+    class Album implements Comparable<Album>{
+        int idx;
+        String genre;
+        int play;
+        
+        Album(int idx, String genre, int play){
+            this.idx = idx;
+            this.genre = genre;
+            this.play = play;
+        }
+        
+        // 2. 3. 조건에 따라 정렬
+        @Override
+        public int compareTo(Album a){
+            if(this.play == a.play)
+                return this.idx - a.idx;
+            else
+                return a.play - this.play;
+        }
+    }
+    public int[] solution(String[] genres, int[] plays) {
+        
+        HashMap<String, Integer> hm = new HashMap<>();
+        ArrayList<Album> playList = new ArrayList<>();
+        
+        // HashMap PlayList에 값 넣기
+        for(int i=0; i<genres.length; i++){
+            if(!hm.containsKey(genres[i])){
+                hm.put(genres[i], plays[i]);
+            } else{
+                hm.put(genres[i], hm.get(genres[i]) + plays[i]);
+            }
+            playList.add(new Album(i, genres[i], plays[i]));
+        }
+        
+        Collections.sort(playList);
+        
+        // '1. 속한 노래가 많이 재생된 장르르 먼저 수록합니다.'
+        List<String> sortList = new ArrayList<>(hm.keySet());
+        sortList.sort((a, b) -> hm.get(b) - hm.get(a));
+        
+        // for(String s : sortList){
+        //     System.out.println(s+" "+hm.get(s));
+        // }
+        // for(int i=0; i<playList.size(); i++){
+        //     System.out.println(playList.get(i).idx+" "+playList.get(i).genre+" "+playList.get(i).play);
+        // }
+        
+        ArrayList<Integer> answerList = new ArrayList<>();
+        for(String s : sortList){
+            int cnt = 0;
+            for(int i=0; i<playList.size(); i++){
+                if(s.equals(playList.get(i).genre) && cnt < 2){
+                    answerList.add(playList.get(i).idx);
+                    cnt++;
+                }
+            }
+        }
+        
+        // System.out.println(answerList.size());
+        int[] answer = new int[answerList.size()];
+        for(int i=0; i<answerList.size(); i++){
+            answer[i] = answerList.get(i);
+        }
+        
+        return answer;
+    }
+}
