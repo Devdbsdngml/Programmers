@@ -1,0 +1,116 @@
+// 첫번째 접근 방법 및 풀이
+// 답도 틀리고 ArrayIndexOutOfBoundsException에러 남
+
+class Solution {
+    public int solution(String dirs) {
+        int answer = 0;
+        int[][] matrix = new int[11][11];
+        
+        int x = 5;
+        int y = 5;
+        for(char cmd : dirs.toCharArray()){
+            switch(cmd) {
+                case 'U' : {
+                    if(matrix[x][y-1] != 1 && check(x, y-1)){
+                        matrix[x][y-1] = 1;
+                        answer++;
+                        y -= 1;
+                    }
+                    break;
+                }
+                    
+                case 'D' : {
+                    if(matrix[x][y+1] != 1 && check(x, y+1)){
+                        matrix[x][y+1] = 1;
+                        answer++;
+                        y += 1;
+                    }
+                    break;
+                }
+                    
+                case 'L' : {
+                    if(matrix[x-1][y] != 1 && check(x-1, y)){
+                        matrix[x-1][y] = 1;
+                        answer++;
+                        x -= 1;
+                    }
+                    break;
+                }
+                    
+                case 'R' : {
+                    if(matrix[x+1][y] != 1 && check(x+1, y)){
+                        matrix[x+1][y] = 1;
+                        answer++;
+                        x += 1;
+                    }
+                    break; 
+                }  
+            }  
+        }
+        
+        return answer;
+    }
+    
+    boolean check(int x, int y){
+        if(x < 0 || x > 10 || y < 0 || y > 10)
+            return false;
+        return true;
+    }
+}
+
+// 두번째 블로그에서 힌트보고 작성한 풀이
+import java.util.*;
+
+class Solution {
+    public int solution(String dirs) {
+        int answer = 0;
+        int curX = 0; // 현재 X좌표
+        int curY = 0; // 현재 Y좌표
+        
+        HashSet<String> route = new HashSet<>(); // 움직일 경로를 담을 HashSet(중복이 있으면 안 됨으로)
+        
+        for(char cmd : dirs.toCharArray()){
+            int[] nextXY = getNextXY(curX, curY, cmd);
+            int nextX = nextXY[0]; // 다음으로 이동한 X좌표
+            int nextY = nextXY[1]; // 다음으로 이동할 Y좌표
+            
+            // 범위 안에 존재하고
+            if(-5 <= nextX && nextX <=5 && -5 <= nextY && nextY <= 5){
+                // 한번도 가지않은 경로일 때
+                if(!route.contains(""+curX+curY+nextX+nextY) && !route.contains(""+nextX+nextY+curX+curY)){
+                    route.add(""+curX+curY+nextX+nextY);
+                    answer++;
+                }
+                curX = nextX;
+                curY = nextY; // 위치 조정
+            }
+        }
+        return answer;
+    }
+    
+    // 다음 위치 구하기
+    int[] getNextXY(int x, int y, char c){
+        int[] nextXY = {x, y};
+        
+        switch(c){
+            case 'U' : {
+                nextXY[1] -= 1;
+                break;
+            }
+            case 'D' : {
+                nextXY[1] += 1;
+                break;
+            }
+            case 'L' : {
+                nextXY[0] -= 1;
+                break;
+            }
+            case 'R' : {
+                nextXY[0] += 1;
+                break;
+            }
+        }
+        
+        return nextXY;
+    }
+}
