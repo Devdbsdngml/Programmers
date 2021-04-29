@@ -1,0 +1,182 @@
+// 디버깅용 풀이
+// 이중 ArrayList를 사용했고 내부를 이해하느라 한참 걸렸지만 하나하나 다 찍어봄으로써 이해함
+// 문제 자체는 기본적인 다익스트라 알고리즘을 사용하면 해결됨
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main{
+    static class Edge implements Comparable<Edge>{
+        int to;
+        int cost;
+
+        public Edge(int to, int cost) {
+            this.to = to;
+            this.cost = cost;
+        }
+
+        public int compareTo(Edge o){
+            return this.cost - o.cost;
+        }
+    }
+    private static BufferedReader br;
+    private static BufferedWriter bw;
+
+    static ArrayList<ArrayList<Edge>> adj;
+    static PriorityQueue<Edge> pque;
+    static int[] dist;
+
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        // input
+        int N = 5;
+        int[][] road = {{1,2,1}, {2,3,3}, {5,2,2}, {1,4,2}, {5,3,1}, {5,4,2}};
+        int k = 3;
+
+        // init
+        adj = new ArrayList<>();
+        pque = new PriorityQueue<>();
+        dist = new int[N+1];
+
+        Arrays.fill(dist, 500001);
+
+        for(int i=0; i<=N; i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i=0; i<road.length; i++){
+            int from = road[i][0];
+            int to = road[i][1];
+            int cost = road[i][2];
+
+            adj.get(from).add(new Edge(to, cost));
+            adj.get(to).add(new Edge(from, cost));
+        }
+
+//        bw.write(adj.size()+"size\n");
+//        bw.write("what is this ? "+adj.get(1).get(0).to+" "+adj.get(1).get(0).cost+"\n");
+//        bw.write("what is this ? "+adj.get(1).get(1).to+" "+adj.get(1).get(1).cost+"\n");
+//        bw.newLine();
+//        bw.write("what is this ? "+adj.get(2).get(0).to+" "+adj.get(2).get(0).cost+"\n");
+//        bw.write("what is this ? "+adj.get(2).get(1).to+" "+adj.get(2).get(1).cost+"\n");
+//        bw.write("what is this ? "+adj.get(2).get(2).to+" "+adj.get(2).get(2).cost+"\n");
+//        bw.newLine();
+//        bw.write("what is this ? "+adj.get(3).get(0).to+" "+adj.get(3).get(0).cost+"\n");
+//        bw.write("what is this ? "+adj.get(3).get(1).to+" "+adj.get(3).get(1).cost+"\n");
+//        bw.newLine();
+//        bw.write("what is this ? "+adj.get(4).get(0).to+" "+adj.get(4).get(0).cost+"\n");
+//        bw.write("what is this ? "+adj.get(4).get(1).to+" "+adj.get(4).get(1).cost+"\n");
+//        bw.newLine();
+//        bw.write("what is this ? "+adj.get(5).get(0).to+" "+adj.get(5).get(0).cost+"\n");
+//        bw.write("what is this ? "+adj.get(5).get(1).to+" "+adj.get(5).get(1).cost+"\n");
+//        bw.write("what is this ? "+adj.get(5).get(2).to+" "+adj.get(5).get(2).cost+"\n");
+
+        dist[1] = 0;
+        pque.offer(new Edge(1, 0));
+
+        dijkstra();
+
+//        for(int i : dist) bw.write(i+" ");
+
+        bw.flush();
+        bw.close();
+    }
+
+    private static void dijkstra() {
+        while(!pque.isEmpty()){
+            Edge edge = pque.poll();
+
+            for(Edge e : adj.get(edge.to)){
+                if(dist[e.to] > dist[edge.to] + e.cost){
+//                    System.out.println("e.to  edge.to   e.cost");
+//                    System.out.println(e.to+" "+edge.to+" "+e.cost);
+//                    System.out.println(dist[e.to]+" "+dist[edge.to]+" "+e.cost);
+//                    System.out.println();
+                    dist[e.to] = dist[edge.to] + e.cost;
+                    pque.offer(e);
+                }
+            }
+        }
+    }
+}
+
+
+
+// 실제 풀이
+import java.util.*;
+
+class Solution {
+    class Edge implements Comparable<Edge>{
+        int to; // 가야할 마을
+        int cost; // 가는 데 비용
+        
+        Edge(int to, int cost){
+            this.to = to;
+            this.cost = cost;
+        }
+        
+        public int compareTo(Edge o){
+            return this.cost - o.cost;
+        }
+    }
+    
+    ArrayList<ArrayList<Edge>> adj; // 마을 리스트(Outer List + Inner List)
+    PriorityQueue<Edge> que;
+    int[] dist; // 마을끼리 최단 이동 거리를 담을 배열
+    
+    public int solution(int N, int[][] road, int K) {
+        int answer = 0;
+        
+        
+        adj = new ArrayList<>();
+        que = new PriorityQueue<>();
+        dist = new int[N+1]; // index 1부터 사용하기 위해(마을 번호랑 일치)
+        
+        for(int i=0; i<=N; i++){
+            adj.add(new ArrayList<>());
+        }
+        Arrays.fill(dist, 5000001); // 마을의 이동 거리를 최대로 초기화
+        
+        // adj 마을 리스트에 비용 담기
+        for(int i=0; i<road.length; i++){
+            int from = road[i][0];
+            int to = road[i][1];
+            int cost = road[i][2];
+            
+            adj.get(from).add(new Edge(to, cost));
+            adj.get(to).add(new Edge(from, cost));
+        }
+        
+        dist[1] = 0; // 1번 마을은 무조건 배달 가능하고 싸이클 없음
+        que.offer(new Edge(1, 0));
+        
+        dijkstra();
+        
+        for(int i=1; i<dist.length; i++){
+            if(dist[i] <= K){
+                answer++;
+            }
+        }
+
+        return answer;
+    }
+    
+    void dijkstra(){
+        while(!que.isEmpty()){
+            Edge edge = que.poll();
+            
+            for(Edge nextEdge : adj.get(edge.to)){
+                if(dist[nextEdge.to] > dist[edge.to] + nextEdge.cost){
+                    dist[nextEdge.to] = dist[edge.to] + nextEdge.cost;
+                    que.offer(nextEdge);
+                }
+            }
+        }
+    }
+}
