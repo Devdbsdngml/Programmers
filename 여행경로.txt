@@ -1,0 +1,35 @@
+import java.util.*;
+
+class Solution {
+    ArrayList<String> list = new ArrayList<>();
+    boolean[] visited;
+    
+    public String[] solution(String[][] tickets) {
+        
+        visited = new boolean[tickets.length];
+        
+        System.out.println(10000*10000);
+        
+        dfs(tickets, 0, "ICN", "ICN");
+        
+        Collections.sort(list);
+        String[] answer = list.get(0).split(" ");
+        return answer;
+    }
+    
+    void dfs(String[][] tickets, int cnt, String curCity, String ans){
+        // base condtion
+        if(cnt == tickets.length){
+            list.add(ans);
+            return;
+        }
+        
+        for(int i=0; i<tickets.length; i++){
+            if(!visited[i] && tickets[i][0].equals(curCity)){
+                visited[i] = true;
+                dfs(tickets, cnt+1, tickets[i][1], ans+" "+tickets[i][1]);
+                visited[i] = false;
+            }
+        }
+    }
+}
