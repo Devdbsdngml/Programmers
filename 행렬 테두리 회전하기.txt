@@ -1,0 +1,101 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Main{
+    private static BufferedReader br;
+    private static BufferedWriter bw;
+
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        int rows = 6;
+        int columns = 6;
+        int[][] queries = {{2,2,5,4}, {3,3,6,6}, {5,1,6,3}};
+
+        int[] res = solution(rows, columns, queries);
+
+        bw.flush();
+        br.close();
+        bw.close();
+    }
+    private static int[][] matrix;
+    private static ArrayList<Integer> answerList;
+
+    private static int[] dx = {1, 0, -1, 0};
+    private static int[] dy = {0, 1, 0, -1};
+
+    public static int[] solution(int rows, int columns, int[][] queries) {
+        answerList = new ArrayList<>();
+        makeMatrix(rows, columns);
+
+        for(int i=0; i< queries.length; i++){
+            rotateMatrix(queries[i]);
+            printMatrix(matrix);
+            System.out.println();
+        }
+
+        int[] answer = new int[answerList.size()];
+        for(int i=0; i< answerList.size(); i++){
+            System.out.println(answerList.get(i)+" ");
+            answer[i] = answerList.get(i);
+        }
+
+        return answer;
+    }
+
+    private static void makeMatrix(int row, int columns){
+        matrix = new int[row][columns];
+        int val = 1;
+
+        for(int i=0; i<row; i++){
+            for(int j=0; j<columns; j++){
+                matrix[i][j] = val++;
+            }
+        }
+    }
+
+    private static void rotateMatrix(int[] rotate){
+        int startPosX = rotate[0] - 1; // 시작 X 좌표
+        int startPosY = rotate[1] - 1; // 시작 Y 좌표
+        int endPosX = rotate[2] - 1; // 마지막 X 좌표
+        int endPosY = rotate[3] - 1; // 마지막 Y 좌표
+
+        System.out.println(startPosX+" "+startPosY+" "+endPosX+" "+endPosY);
+
+        int curX = rotate[0] - 1;
+        int curY = rotate[1] - 1;
+
+        int dir = 0;
+        int temp = matrix[curX][curY];
+        int min = matrix[curX][curY];
+
+        while(dir < 4){
+            int nextX = curX + dx[dir];
+            int nextY = curY + dy[dir];
+
+            if(startPosX <= nextX && nextX <= endPosX && startPosY <= nextY && nextY <= endPosY){
+                if(min > matrix[nextX][nextY]) min = matrix[nextX][nextY];
+
+                matrix[curX][curY] = matrix[nextX][nextY];
+                curX = nextX;
+                curY = nextY;
+            }else{
+                dir++;
+            }
+        }
+        matrix[startPosX][startPosY+1] = temp;
+        answerList.add(min);
+    }
+
+    private static void printMatrix(int[][] arr){
+        for(int[] i : arr){
+            for(int j : i){
+                System.out.print(j+" ");
+            }
+            System.out.println();
+        }
+    }
+}
