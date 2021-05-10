@@ -1,0 +1,40 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String[] operations) {
+        int[] answer = new int[2];
+        // 최소힙 최대힙 우선순위큐
+        PriorityQueue<Integer> minQueue = new PriorityQueue<>();
+        PriorityQueue<Integer> maxQueue = new PriorityQueue<>(Collections.reverseOrder());
+        
+        StringTokenizer st;
+        for(String oper : operations){
+            st = new StringTokenizer(oper);
+            
+            String cmd = st.nextToken();
+            int num = Integer.parseInt(st.nextToken());
+            
+            if(cmd.equals("I")){
+                minQueue.offer(num);
+                maxQueue.offer(num);
+            } else{
+                // 빈 큐에 데이터를 삭제하라는 연산이 주어질 경우, 해당 연산은 무시합니다.
+                if(minQueue.isEmpty() || maxQueue.isEmpty()) continue;
+                else{
+                    if(num == 1){
+                        int max = maxQueue.poll();
+                        minQueue.remove(max);
+                    } else{
+                        int min = minQueue.poll();
+                        maxQueue.remove(min);
+                    }
+                }
+            }
+        }
+        
+        answer[0] = maxQueue.isEmpty() ? 0 : maxQueue.poll();
+        answer[1] = minQueue.isEmpty() ? 0 : minQueue.poll();
+        
+        return answer;
+    }
+}
