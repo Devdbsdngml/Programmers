@@ -1,0 +1,41 @@
+class Solution {
+    static final int div = 1_000_000_007;
+    public int solution(int m, int n, int[][] puddles) {
+        int[][] matrix = new int[n][m];
+        
+        // 물 웅덩이 matrix에 표시 puddles가 (행,열)이 아니라 (열,행)이란다;;
+        for(int[] i : puddles){
+            matrix[i[1]-1][i[0]-1] = -1;
+        }
+        
+        matrix[0][0] = 1; // 시작점
+        
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                // 웅덩이 만나면? 0으로 변환
+                if(matrix[i][j] == -1){
+                    matrix[i][j] = 0;
+                    continue; // 변환 후 skip
+                }
+                /*
+                맨 윗줄이 아닐 때(i != 0) 위의 값을 현 위치에 더해주고
+                맨 왼쪽줄이 아닐 때(j != 0) 왼쪽 값을 현 위치에 더해줌
+                */
+                if(i != 0){
+                    matrix[i][j] += matrix[i-1][j] % div;
+                }
+                if(j != 0){
+                    matrix[i][j] += matrix[i][j-1] % div;
+                }
+            }
+        }
+        
+        // for(int[] i : matrix){
+        //     for(int j : i)
+        //         System.out.print(j+" ");
+        //     System.out.println();
+        // }
+        
+        return matrix[n-1][m-1] % div;
+    }
+}
