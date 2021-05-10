@@ -1,0 +1,33 @@
+// 무슨 말인지 이해가 잘 안 돼서 힌트를 보고 풀었는데도 이해가 안 감..
+// 다시 도전해볼 것
+
+class Solution {
+    public int solution(int[] a) {
+        int answer = 1;
+        int left = 0;
+        int right = a.length-1;
+        
+        int leftMin = a[left];
+        int rightMin = a[right];
+        
+        while(left < right){
+            if(leftMin > rightMin){
+                left++;
+                
+                if(a[left] < leftMin){
+                    answer++;
+                    leftMin = a[left];
+                }
+            } else{
+                right--;
+                
+                if(a[right] < rightMin){
+                    answer++;
+                    rightMin = a[right];
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
