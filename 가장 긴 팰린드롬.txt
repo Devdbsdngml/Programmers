@@ -1,0 +1,115 @@
+// 첫번째 접근방법 및 풀이..
+// 팰린드롬의 정의를 잘못 이해함
+// 한 문자를 기준으로 앞의 문자열과 뒤 문자열 reverse가 같으면 팰린드롬인줄 알았지만
+// 정확하게 틀림
+
+class Solution
+{
+    public int solution(String s)
+    {
+        int answer = 0;
+
+        int len = s.length()%2 == 0 ? s.length()/2 : s.length()/2 + 1;
+
+        StringBuilder front;
+        StringBuilder back;
+
+        for(int i=1; i<len; i++){
+            front = new StringBuilder();
+            back = new StringBuilder();
+
+            front.append(s, 0, i);
+            back.append(s, i+1, 2*i + 1);
+
+            if(front.toString().equals(back.reverse().toString())){
+                answer = 2*i + 1;
+                System.out.println(answer);
+            }
+        }
+
+        return answer;
+    }
+}
+
+
+// 두번째 풀이
+// 타 블로그에서 힌트를 얻었다
+// 팰린드롬의 정의는 한 문자의 기준으로 보면 안 되고 문자열 전체를 생각해야함
+
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main{
+    private static BufferedReader br;
+    private static BufferedWriter bw;
+
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        String s = "abcdcba";
+        String s1 = "abacde";
+
+        int res = solution(s);
+        bw.write(res+"");
+        
+        bw.newLine();
+        
+        int res2 = solution(s1);
+        bw.write(res2+"");
+
+        bw.flush();
+        br.close();
+        bw.close();
+    }
+
+    private static int solution(String s) {
+        int answer = 1;
+        char[] c = s.toCharArray();
+
+        if(s.length() < 2) return answer;
+
+        /*
+        * 가장 긴 문자열(s 전체부터) 팰린드롬을 검사하니까
+        * 더 작은 범위의 팰린드롬을 검사할 필요가 없다.
+        *   : s.length() - answer를 해주는 이유
+        * */
+        for(int i=0; i<s.length()-answer; i++){
+            answer = Math.max(answer, findPalinLen(i, s.length()-1, c));
+        }
+
+        return answer;
+    }
+    /*
+    * 문자열 s의 첫 문자와 끝 문자가 같은지 확인 후 같다면
+    * 그 인덱스들부터 안쪽 인덱스들까지 들어가서 한번 더 검사를 해준다.
+    * */
+    private static int findPalinLen(int start, int end, char[] c) {
+        for(int i=end; i>start; i--){
+            if(c[start] == c[i] && isPalin(start, i, c)){
+                return i-start+1;
+            }
+        }
+        return 0;
+    }
+    /*
+    * 문자열 s의 길이가 짝수인지 홀수인지 두 경우 확인을 위해서
+    * mid 라는 변수에 중앙값을 저장 후 mid가 0보다 클 때까지 검사를 하면
+    * 두 경우 모두 검사할 수 있음.
+    * */
+    private static boolean isPalin(int start, int end, char[] c) {
+        int mid = (end-start+1) / 2;
+
+        while (mid > 0){
+            if(c[start] != c[end]){
+                return false;
+            }
+            start++;
+            end--;
+            mid--;
+        }
+
+        return true;
+    }
+}
