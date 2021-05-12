@@ -1,0 +1,55 @@
+// 첫번째 접근 방법 및 풀이
+
+import java.util.Arrays;
+
+class Solution {
+    public long solution(int n, int[] works) {
+        long answer = 0;
+        int len = works.length-1;
+        Arrays.sort(works);
+        
+        while(n-- > 0){
+            if(works[len] != 0){
+                works[len--]--;
+                if(len < 0) len = works.length-1;
+            }
+        }
+        
+        // for(int i : works) System.out.print(i+" ");
+        for(int i : works) answer += Math.pow(i, 2);
+        
+        return answer;
+    }
+}
+
+// 두번째 풀이
+// 위와 생각은 비슷한데 우선 순위큐를 이용해서 큰 값에서 계속 1씩 빼줬다
+
+import java.util.PriorityQueue;
+import java.util.Collections;
+
+class Solution {
+    public long solution(int n, int[] works) {
+        long answer = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        
+        // 우선순위 큐에 내림차순으로 삽입
+        for(int i : works) pq.offer(i);
+        
+        // 가장 큰 수부터 1씩 빼주면 피로도를 최소화할 수 있지 않을까
+        while(n-- > 0){
+            int work = pq.poll();
+            if(work == 0) break;
+            
+            pq.offer(work-1);
+        }
+        
+        // ans에 pow 해서 ++
+        while(!pq.isEmpty()){
+            // System.out.print(pq.poll()+" ");
+            answer += Math.pow(pq.poll(), 2);
+        }
+        
+        return answer;
+    }
+}
