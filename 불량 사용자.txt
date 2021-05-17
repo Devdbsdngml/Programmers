@@ -1,0 +1,77 @@
+// Try again.
+
+import java.io.*;
+import java.util.HashSet;
+import java.util.StringTokenizer;
+
+public class Main {
+    private static BufferedReader br;
+    private static BufferedWriter bw;
+
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        String[] user_id = {"frodo", "fradi", "crodo", "abc123", "frodoc"};
+        String[] banned_id = {"fr*d*", "*rodo", "******", "******"};
+
+        int res = solution(user_id, banned_id);
+        bw.write(res+"\n");
+
+        for (HashSet<String> hsh : hshs) {
+            bw.write(hsh.toString() + "\n");
+        }
+//        3
+//      [crodo, abc123, frodo, frodoc]
+//      [crodo, fradi, abc123, frodoc]
+//      [fradi, abc123, frodo, frodoc]
+
+        bw.flush();
+        br.close();
+        bw.close();
+    }
+
+    static boolean[] isUsed;
+    static HashSet<HashSet<String>> hshs;
+
+    private static int solution(String[] user_id, String[] banned_id) {
+        int answer = 0;
+        isUsed = new boolean[user_id.length];
+        hshs = new HashSet<>();
+
+        dfs(0, new HashSet<String>(), user_id, banned_id);
+        answer = hshs.size();
+
+        return answer;
+    }
+
+    private static void dfs(int depth, HashSet<String> hs, String[] user_id, String[] banned_id) {
+        // base condition
+        if(depth == banned_id.length){
+            hshs.add(new HashSet<>(hs));
+            return;
+        }
+
+        for(int i=0; i<user_id.length; i++){
+            if(!isUsed[i]){
+                if(user_id[i].length() == banned_id[depth].length() && isSame(user_id[i], banned_id[depth])){
+                    isUsed[i] = true;
+                    hs.add(user_id[i]);
+                    dfs(depth+1, hs, user_id, banned_id);
+                    isUsed[i] = false;
+                    hs.remove(user_id[i]);
+                }
+            }
+        }
+    }
+
+    private static boolean isSame(String userName, String bannedName) {
+        for(int i=0; i<userName.length(); i++){
+            if(bannedName.charAt(i) == '*') continue;
+            if(userName.charAt(i) != bannedName.charAt(i)) return false;
+        }
+
+        return true;
+    }
+}
