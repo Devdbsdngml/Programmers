@@ -1,0 +1,64 @@
+import java.io.*;
+
+public class Main {
+    private static BufferedReader br;
+    private static BufferedWriter bw;
+
+
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int a = 7;
+        int b = 3;
+        int c = 4;
+
+        String aa = Integer.toBinaryString(a);
+        String bb = Integer.toBinaryString(b);
+        String cc = Integer.toBinaryString(c);
+
+        long[] answer = new long[2];
+
+//        bw.write(aa+" "+bb+" "+cc);
+
+        for(int i=0; i<2; i++){
+            for(int j=a+1; ; j++){
+                int cnt = checkDiffCnt(a, j);
+                if(cnt == 1 || cnt == 2){
+                    answer[i] = j;
+                    break;
+                }
+            }
+        }
+
+        for(long l : answer) bw.write(l+" ");
+
+        bw.flush();
+        br.close();
+        bw.close();
+    }
+
+    private static int checkDiffCnt(int a, int b) {
+        String cur = Integer.toBinaryString(a);
+        
+        String next = Integer.toBinaryString(b);
+        int cnt = 0;
+
+//        System.out.println(cur+" "+next);
+
+        int maxLen = Math.max(cur.length(), next.length());
+//        System.out.println("len : "+maxLen);
+
+        cur = String.format("%"+maxLen+"s", cur).replace(" ", "0");
+//        next = String.format("%"+maxLen+"s", next.replace(" ", "0"));
+
+        System.out.println(cur+" "+next);
+
+        for(int i=0; i<maxLen; i++){
+            if(cur.charAt(i) != next.charAt(i))
+                cnt++;
+        }
+
+        return cnt;
+    }
+}
