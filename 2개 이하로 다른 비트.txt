@@ -1,3 +1,5 @@
+// 첫번째 풀이 TC 10, 11 시간초과
+
 import java.io.*;
 
 public class Main {
@@ -60,5 +62,37 @@ public class Main {
         }
 
         return cnt;
+    }
+}
+
+// 두번째 풀이
+// 규칙을 찾아내야 했던.. 생각을 많이 해야 했던..
+
+class Solution {
+    public long[] solution(long[] numbers) {
+        long[] answer = new long[numbers.length];
+
+        for(int i=0; i<numbers.length; i++){
+            if(numbers[i] % 2 == 0){
+                answer[i] = numbers[i]+1;
+            } else{
+                answer[i] = findNum(numbers[i]);
+            }
+        }
+
+        return answer;
+    }
+
+    private long findNum(long number) {
+        String binary = "0"+Long.toBinaryString(number);
+        StringBuilder sb = new StringBuilder(binary);
+
+        int lastIdxOfZero = sb.lastIndexOf("0");
+        sb.setCharAt(lastIdxOfZero, '1');
+
+        int nextIdxOfOne = sb.indexOf("1", lastIdxOfZero+1);
+        sb.setCharAt(nextIdxOfOne, '0');
+
+        return Long.parseLong(sb.toString(), 2);
     }
 }
