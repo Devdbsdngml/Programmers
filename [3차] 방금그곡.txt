@@ -92,3 +92,73 @@ public class Main {
         return s;
     }
 }
+
+// 반복되는 멜로디를 구할 때 Length를 구하면 안 됐음
+// None이 리턴이 될 리가 없어서..
+
+import java.util.*;
+
+class Solution {
+    String solution(String m, String[] musicinfos) {
+        String res = "(None)";
+        StringTokenizer st; 
+        int max = -1;
+        
+        m = remove(m);
+
+        for(String music : musicinfos){
+            st = new StringTokenizer(music, ",");
+
+            String startTime = st.nextToken();
+            String endTime = st.nextToken();
+            String musicTitle = st.nextToken();
+            String melody = remove(st.nextToken());
+
+            String[] start = startTime.split(":");
+            String[] end = endTime.split(":");
+
+            int hour = Integer.parseInt(end[0]) - Integer.parseInt(start[0]);
+            int min = Integer.parseInt(end[1]) - Integer.parseInt(start[1]);
+
+            int playTime = Math.abs(hour*60 + min);
+
+            String repeatMelody = findStr(m, melody, playTime);
+
+            if(repeatMelody.contains(m)){
+                if(playTime > max){
+                max = playTime;
+                res = musicTitle;
+                }
+            }
+        }
+
+        return res;
+    }
+
+    private String findStr(String m, String melody, int playTime) {
+        StringBuilder sb = new StringBuilder();
+
+        if(melody.length() < playTime){
+            int div = playTime / melody.length();
+            int mod = playTime % melody.length();
+
+            sb.append(melody.repeat(div));
+            sb.append(melody, 0, mod);
+
+        }else {
+            sb.append(melody, 0, playTime);
+        }
+
+        return sb.toString();
+    }
+    
+    private String remove(String s){
+        s = s.replaceAll("A#", "a");
+        s = s.replaceAll("C#", "c");
+        s = s.replaceAll("D#", "d");
+        s = s.replaceAll("F#", "f");
+        s = s.replaceAll("G#", "g");
+
+        return s;
+    }
+}
